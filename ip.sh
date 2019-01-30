@@ -12,8 +12,8 @@ GETIPADDR="ifconfig.me"
 
 
 # Customize here your own paths
-NOWIPADDR="/home/chema/ipcheckscript/nowipaddr"
-LOG="/home/chema/ipcheckscript/logIP.log"
+NOWIPADDR="/home/chema/ip-checker/nowipaddr"
+LOG="/home/chema/ip-checker/logIP.log"
 
 
 
