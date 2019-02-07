@@ -12,8 +12,8 @@ GETIPADDR="ifconfig.me"
 
 
 # Customize here your own paths
-NOWIPADDR="/home/chema/ip-checker/nowipaddr"
-LOG="/home/chema/ip-checker/logIP.log"
+NOWIPADDR="/home/wyre/ip-checker/nowipaddr"
+LOG="/home/wyre/ip-checker/logIP.log"
 
 
 
@@ -38,15 +38,15 @@ then
     # Debugging part to send mails or log info even
     # when there are no changes
 
-    #if [ "$(cat $NOWIPADDR)" = "$(curl-s $GETIPADDR)" ]
-    #then
-    #    echo "Current IP is -> $(cat $NOWIPADDR)" | mail -s "Testing YemaServ mail Service" WyRe12@gmail.com
-    #    {
-    #        date;
-    #        echo "No IP change. Right now is $(cat $NOWIPADDR)";
-    #        echo " ";
-    #    } >> $LOG
-    #fi
+  #  if [ "$(cat $NOWIPADDR)" = "$(curl -s $GETIPADDR)" ]
+  #  then
+  #      echo "Current IP is -> $(cat $NOWIPADDR)" | mail -s "Testing YemaServ mail Service" WyRe12@gmail.com
+  #      {
+  #          date;
+  #          echo "No IP change. Right now is $(cat $NOWIPADDR)";
+  #          echo " ";
+  #      } >> $LOG
+  #  fi
 
 # If nowipaddr or logIP.log does not exist it will creates needed file
 # and it takes this as firs time execution.
