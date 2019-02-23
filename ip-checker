@@ -18,7 +18,7 @@ log="/home/wyre/ip-checker/logIP.log"
 
 writing_mail() {
     printf '%s\n%s\n%s\n' "To: WyRe12@gmail.com" "From: lentium.xyz@gmail.com" "Subject: YemaServer Ip has changed";
-    printf '%s -> %s' "YemaSrv IP has changed to" "$(cat $1)";
+    printf '\n%s -> %s\n' "YemaSrv IP has changed to" "$(cat "$1")";
 }
 
 if [ -e $nowipaddr ] && [ -e $log ];
@@ -32,10 +32,10 @@ then
         curl -s $getipaddr > $nowipaddr
         # Switch here your personal mail to receive sent mail
         #echo "IP has changed to -> $(cat $nowipaddr)" | mail -s "YemaServer Ip has changed" WyRe12@gmail.com
-        if [[ $nowipaddr != *[!.0-9.]* ]]
-        then
+        #if [[ $nowipaddr != *[!.0-9.]* ]]
+        #then
             writing_mail "$nowipaddr" | msmtp -a default WyRe12@gmail.com
-        fi
+        #fi
         {
             date;
             echo "IP has changed to -> $(cat $nowipaddr); sending email to WyRe12@gmail.com";
@@ -89,10 +89,10 @@ else
     #touch $mail_content
     #writing_mail() > $mail_content
 
-    if [[ $nowipaddr != *[!.0-9.]* ]]
-    then
+    #if [[ $nowipaddr != *[!.0-9.]* ]]
+    #then
         writing_mail "$nowipaddr" | msmtp -a default WyRe12@gmail.com
-    fi
+    #fi
 
     #echo "Fetching IP for the first time, IP -> $(cat $nowipaddr)" | mail -s "First time execution IP script" WyRe12@gmail.com
     {
