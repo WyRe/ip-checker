@@ -6,4 +6,5 @@ It is ideal to be scheduled with cron in Unix-like systems. In the case of that 
 
 ## Dependencies
 
-  - `postfix`
+  - `msmtp`
+  - `cron` (to be scheduled)
