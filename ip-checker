@@ -1,51 +1,59 @@
-#!/bin/sh
+#!/bin/bash
 
 # Site from script fetches your public IP
-GETIPADDR="ifconfig.me"
+getipaddr="ifconfig.me"
 
 
 # This way does not work as I expected, cause pwd fetches the curren path FROM you are running
 # the scritp, and eventually could not be run from its own directory
 #CWD=$(pwd)
-#NOWIPADDR="$CWD/nowipaddr"
-#LOG="$CWD/logIP.log"
+#nowipaddr="$CWD/nowipaddr"
+#log="$CWD/logIP.log"
 
 
 # Customize here your own paths
-NOWIPADDR="/home/wyre/ip-checker/nowipaddr"
-LOG="/home/wyre/ip-checker/logIP.log"
+nowipaddr="/home/wyre/ip-checker/nowipaddr"
+log="/home/wyre/ip-checker/logIP.log"
+#mail_content="/home/wyre/ip-checker/mail.txt"
 
+writing_mail() {
+    printf '%s\n%s\n%s\n' "To: WyRe12@gmail.com" "From: lentium.xyz@gmail.com" "Subject: YemaServer Ip has changed";
+    printf '%s -> %s' "YemaSrv IP has changed to" "$(cat $1)";
+}
 
-
-if [ -e $NOWIPADDR ] && [ -e $LOG ];
+if [ -e $nowipaddr ] && [ -e $log ];
 then
 
     # Main block, here is checking if IP has changed
     # then sends you an email
 
-    if [ "$(cat $NOWIPADDR)" != "$(curl -s $GETIPADDR)" ]
+    if [ "$(cat $nowipaddr)" != "$(curl -s $getipaddr)" ]
     then
-        curl -s $GETIPADDR > $NOWIPADDR
+        curl -s $getipaddr > $nowipaddr
         # Switch here your personal mail to receive sent mail
-        echo "IP has changed to -> $(cat $NOWIPADDR)" | mail -s "YemaServer Ip has changed" WyRe12@gmail.com
+        #echo "IP has changed to -> $(cat $nowipaddr)" | mail -s "YemaServer Ip has changed" WyRe12@gmail.com
+        if [[ $nowipaddr != *[!.0-9.]* ]]
+        then
+            writing_mail "$nowipaddr" | msmtp -a default WyRe12@gmail.com
+        fi
         {
             date;
-            echo "IP has changed to -> $(cat $NOWIPADDR); sending email to WyRe12@gmail.com";
+            echo "IP has changed to -> $(cat $nowipaddr); sending email to WyRe12@gmail.com";
             echo " ";
-        } >> $LOG
+        } >> $log
     fi
 
     # Debugging part to send mails or log info even
     # when there are no changes
 
-  #  if [ "$(cat $NOWIPADDR)" = "$(curl -s $GETIPADDR)" ]
+  #  if [ "$(cat $nowipaddr)" = "$(curl -s $getipaddr)" ]
   #  then
-  #      echo "Current IP is -> $(cat $NOWIPADDR)" | mail -s "Testing YemaServ mail Service" WyRe12@gmail.com
+  #      echo "Current IP is -> $(cat $nowipaddr)" | mail -s "Testing YemaServ mail Service" WyRe12@gmail.com
   #      {
   #          date;
-  #          echo "No IP change. Right now is $(cat $NOWIPADDR)";
+  #          echo "No IP change. Right now is $(cat $nowipaddr)";
   #          echo " ";
-  #      } >> $LOG
+  #      } >> $log
   #  fi
 
 # If nowipaddr or logIP.log does not exist it will creates needed file
@@ -53,30 +61,43 @@ then
 
 else
 
-    if [ -e $LOG ]
+    if [ -e $log ]
     then
-        rm $LOG
+        rm $log
     fi
-    if [ -e $NOWIPADDR ]
+    if [ -e $nowipaddr ]
     then
-        rm $NOWIPADDR
+        rm $nowipaddr
     fi
+    #if [ -e $mail_content ]
+    #then
+    #    rm $mail_content
+    #fi
 
-    touch $LOG
+    touch $log
     {
         echo " ";
         echo "##################################";
         echo "Creating Log for script debugging:";
         echo "##################################";
         echo " ";
-    } >> $LOG
+    } >> $log
 
-    touch $NOWIPADDR
-    curl -s $GETIPADDR > $NOWIPADDR
-    echo "Fetching IP for the first time, IP -> $(cat $NOWIPADDR)" | mail -s "First time execution IP script" WyRe12@gmail.com
+    touch $nowipaddr
+    curl -s $getipaddr > $nowipaddr
+
+    #touch $mail_content
+    #writing_mail() > $mail_content
+
+    if [[ $nowipaddr != *[!.0-9.]* ]]
+    then
+        writing_mail "$nowipaddr" | msmtp -a default WyRe12@gmail.com
+    fi
+
+    #echo "Fetching IP for the first time, IP -> $(cat $nowipaddr)" | mail -s "First time execution IP script" WyRe12@gmail.com
     {
         date;
-        echo "Fetching IP for the first time, IP -> $(cat $NOWIPADDR); sending email to WyRe12@gmail.com";
+        echo "Fetching IP for the first time, IP -> $(cat $nowipaddr); sending email to WyRe12@gmail.com";
         echo " ";
-    } >> $LOG
+    } >> $log
 fi
