@@ -12,8 +12,8 @@ getipaddr="ifconfig.me"
 
 
 # Customize here your own paths
-nowipaddr="/home/wyre/ip-checker/nowipaddr"
-log="/home/wyre/ip-checker/logIP.log"
+nowipaddr="$HOME/ip-checker/nowipaddr"
+log="$HOME/ip-checker/logIP.log"
 #mail_content="/home/wyre/ip-checker/mail.txt"
 
 writing_mail() {
@@ -21,15 +21,15 @@ writing_mail() {
     printf '\n%s -> %s\n' "YemaSrv IP has changed to" "$(cat "$1")";
 }
 
-if [ -e $nowipaddr ] && [ -e $log ];
+if [ -e "$nowipaddr" ] && [ -e "$log" ];
 then
 
     # Main block, here is checking if IP has changed
     # then sends you an email
 
-    if [ "$(cat $nowipaddr)" != "$(curl -s $getipaddr)" ]
+    if [ "$(cat "$nowipaddr")" != "$(curl -s $getipaddr)" ]
     then
-        curl -s $getipaddr > $nowipaddr
+        curl -s "$getipaddr" > "$nowipaddr"
         # Switch here your personal mail to receive sent mail
         #echo "IP has changed to -> $(cat $nowipaddr)" | mail -s "YemaServer Ip has changed" WyRe12@gmail.com
         #if [[ $nowipaddr != *[!.0-9.]* ]]
@@ -38,9 +38,9 @@ then
         #fi
         {
             date;
-            echo "IP has changed to -> $(cat $nowipaddr); sending email to WyRe12@gmail.com";
+            echo "IP has changed to -> $(cat "$nowipaddr"); sending email to WyRe12@gmail.com";
             echo " ";
-        } >> $log
+        } >> "$log"
     fi
 
     # Debugging part to send mails or log info even
@@ -61,30 +61,30 @@ then
 
 else
 
-    if [ -e $log ]
+    if [ -e "$log" ]
     then
-        rm $log
+        rm "$log"
     fi
-    if [ -e $nowipaddr ]
+    if [ -e "$nowipaddr" ]
     then
-        rm $nowipaddr
+        rm "$nowipaddr"
     fi
-    #if [ -e $mail_content ]
+    #if [ -e "$mail_content" ]
     #then
-    #    rm $mail_content
+    #    rm "$mail_content"
     #fi
 
-    touch $log
+    touch "$log"
     {
         echo " ";
         echo "##################################";
         echo "Creating Log for script debugging:";
         echo "##################################";
         echo " ";
-    } >> $log
+    } >> "$log"
 
-    touch $nowipaddr
-    curl -s $getipaddr > $nowipaddr
+    touch "$nowipaddr"
+    curl -s "$getipaddr" > "$nowipaddr"
 
     #touch $mail_content
     #writing_mail() > $mail_content
@@ -97,7 +97,7 @@ else
     #echo "Fetching IP for the first time, IP -> $(cat $nowipaddr)" | mail -s "First time execution IP script" WyRe12@gmail.com
     {
         date;
-        echo "Fetching IP for the first time, IP -> $(cat $nowipaddr); sending email to WyRe12@gmail.com";
+        echo "Fetching IP for the first time, IP -> $(cat "$nowipaddr"); sending email to WyRe12@gmail.com";
         echo " ";
-    } >> $log
+    } >> "$log"
 fi
